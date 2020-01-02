@@ -17,18 +17,34 @@ public class MemberService {
 	@Autowired
 	private MemberMapper memberMapper;
 	@Autowired
+	private MemberFilesMapper memberFilesMapper;
+	@Autowired
 	private ServletContext servletContext;
 	@Autowired
 	private FilePathGenerator filePathGenerator;
 	@Autowired
 	private FileSaver fileSaver;
 	
-	public int memberJoin(MemberVO memberVO,MultipartFile files) throws Exception{
+	
+	public MemberVO memberLogin(MemberVO memberVO) throws Exception{
+		return memberMapper.memberLogin(memberVO);
+	}
+	
+	
+	public int memberJoin(MemberVO memberVO, MultipartFile files) throws Exception{
 		File file= filePathGenerator.getUseClassPathResource("upload");
 		String fileName = fileSaver.save(file, files);
 		System.out.println(fileName);
-		return 0; 
-		//memberMapper.memberJoin(memberVO);
+		int result= memberMapper.memberJoin(memberVO);
+		MemberFilesVO memberFilesVO = new MemberFilesVO();
+		memberFilesVO.setFname(fileName);
+		memberFilesVO.setId(memberVO.getId());
+		memberFilesVO.setOname(fileName);
+		result = memberFilesMapper.memberFilesInsert(memberFilesVO);
+		
+		return result; 
+
 	}
+	
 	
 }

@@ -15,6 +15,32 @@ public class MemberController {
 	@Autowired
 	private MemberService memberservice;
 	
+	@GetMapping("memberLogin")
+	public void memberLogin() throws Exception{
+		
+	}
+	
+	@PostMapping("memberLogin")
+	public ModelAndView memberLogin(MemberVO memberVO) throws Exception{
+		ModelAndView mv = new ModelAndView();
+		memberVO = memberservice.memberLogin(memberVO);
+		
+		String msg = "로그인 실패";
+
+		if(memberVO != null) {
+			msg="로그인 성공";
+		}
+		
+		String path="../";
+		
+		mv.setViewName("common/result");
+		mv.addObject("msg",msg);
+		mv.addObject("path",path);
+		
+		return mv;
+	}
+	
+	
 	@GetMapping("memberJoin")
 	public String memberJoin() throws Exception{
 		return "member/memberJoin";
