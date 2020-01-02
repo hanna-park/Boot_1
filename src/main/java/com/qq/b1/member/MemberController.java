@@ -1,5 +1,7 @@
 package com.qq.b1.member;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +23,7 @@ public class MemberController {
 	}
 	
 	@PostMapping("memberLogin")
-	public ModelAndView memberLogin(MemberVO memberVO) throws Exception{
+	public ModelAndView memberLogin(MemberVO memberVO,HttpSession session) throws Exception{
 		ModelAndView mv = new ModelAndView();
 		memberVO = memberservice.memberLogin(memberVO);
 		
@@ -29,6 +31,7 @@ public class MemberController {
 
 		if(memberVO != null) {
 			msg="로그인 성공";
+			session.setAttribute("member", memberVO);
 		}
 		
 		String path="../";
